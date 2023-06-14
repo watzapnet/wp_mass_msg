@@ -6,10 +6,10 @@ import time
 from datetime import timedelta
 
 # Whatsapp API endpoint
-url = 'http://WP-API-URL'
+url = 'http://IP:5555/api/NAME/send-message'
 
 # Add your api key
-auth_key = 'Bearer $2b$10$NTCAqVeMGRyuEPxOecyxVOo8La1iSLvwtcK7D4CnE1g4NSKDpAMLu'
+auth_key = 'Bearer TOKEN'
 
 # Message file
 message_file = 'mesaj.txt'
@@ -34,6 +34,11 @@ success_count = 0
 # Failure count
 failure_count = 0
 
+
+# List to store working numbers
+working_numbers = []
+
+
 # Api request for each number
 for phone in phones:
     payload = {
@@ -50,15 +55,16 @@ for phone in phones:
     }, data=json.dumps(payload))
 
     # If unsuccess, provide error response
-    if response.status_code != 200:
+    if response.status_code == 201:
         print(f'Hata kodu: {response.status_code} - Hata mesajı: {response.text}')
-        failure_count += 1
-    else:
-        print(f'{phone} numarasına mesaj gönderildi.')
         success_count += 1
+        working_numbers.append(phone)  # Add working number to the list
+    else:
+        print(f'{phone} numarasında whatsapp yok!.')
+        failure_count += 1
 
     # wait 10 secs between each msg
-    time.sleep(10)
+    #time.sleep(10)
 
 # End time
 end_time = time.monotonic()
@@ -86,5 +92,13 @@ html_output = f"""
 # Save HTML output to file
 with open('output.html', 'w') as f:
     f.write(html_output)
+
+
+# Save working numbers to file
+with open('workingnumbers.txt', 'w') as f:
+    for number in working_numbers:
+        f.write(number + '\n')
+
+print("Çalışan numaralar 'workingnumbers.txt' dosyasına kaydedildi.")
 
 print("Rapor başarıyla oluşturuldu ve 'output.html' dosyasına kaydedildi.")
