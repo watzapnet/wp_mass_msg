@@ -6,10 +6,10 @@ import time
 from datetime import timedelta
 
 # Whatsapp API endpoint
-url = 'http://IP:5555/api/NAME/send-message'
+url = 'http://IP:5555/api/{SESSION NAME}/send-message'
 
 # Add your api key
-auth_key = 'Bearer TOKEN'
+auth_key = 'Bearer {TOKEN}'
 
 # Message file
 message_file = 'mesaj.txt'
